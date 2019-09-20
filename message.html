@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Using Closures in Event Listeners</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: {lat: -25.363882, lng: 131.044922 }
+        });
+
+        var bounds = {
+          north: -25.363882,
+          south: -31.203405,
+          east: 131.044922,
+          west: 125.244141
+        };
+
+        // Display the area between the location southWest and northEast.
+        map.fitBounds(bounds);
+
+        // Add 5 markers to map at random locations.
+        // For each of these markers, give them a title with their index, and when
+        // they are clicked they should open an infowindow with text from a secret
+        // message.
+        var secretMessages = ['High Craw Partners: Partner 1 position palms, knees and feet on ground. This posture requires 6 points of contact. Partner 2 overlay Partner 1, forming a cross-torso composition. Partner 1 start sliding over the ground, using points of contact. Partner 2 maintain joint configurations for maximum efficiency.', 'Low Roll Singles: Roll your body in a circular shape. Perform rotational movements by supporting yourself with your palms. Avoid exposing facial features and modifying joint configurations for maximum efficiency.', 'the', 'secret', 'message'];
+        var lngSpan = bounds.east - bounds.west;
+        var latSpan = bounds.north - bounds.south;
+        for (var i = 0; i < secretMessages.length; ++i) {
+          var marker = new google.maps.Marker({
+            position: {
+              lat: bounds.south + latSpan * Math.random(),
+              lng: bounds.west + lngSpan * Math.random()
+            },
+            map: map,
+            icon: 'me2.gif',
+            title: 'High Craw Partners: Partner 1 position palms, knees and feet on ground. This posture requires 6 points of contact. Partner 2 overlay Partner 1, forming a cross-torso composition. Partner 1 start sliding over the ground, using points of contact. Partner 2 maintain joint configurations for maximum efficiency.'
+
+          });
+          attachSecretMessage(marker, secretMessages[i]);
+        }
+      }
+
+     
+
+      // Attaches an info window to a marker with the provided message. When the
+      // marker is clicked, the info window will open with the secret message.
+      function attachSecretMessage(marker, secretMessage) {
+        var infowindow = new google.maps.InfoWindow({
+          content: secretMessage
+        });
+
+        marker.addListener('click', function() {
+          infowindow.open(marker.get('map'), marker);
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuXuaRs5mzqJ1vysLFvX7jaOfzoAovREM&callback=initMap">
+    </script>
+   <!--  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+    </script> -->
+  </body>
+</html>
